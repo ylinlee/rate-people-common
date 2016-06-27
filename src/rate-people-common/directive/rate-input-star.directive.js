@@ -13,27 +13,38 @@
 
   InputStarLink.$inject = ['$scope', '$element', '$attr'];
 
-  function InputStarLink(scope, element, attr) {
+  function InputStarLink($scope, element, attr) {
     $(element).rating({ size: 'xs' });
     $(element).rating('update', attr.stars);
 
-    scope.$watch('stars', function(newVal, oldVal) {
-      if(newVal === oldVal) {
-        return;
-      }
-
-      if(newVal === -1){
-        attr.stars = 0;
-        $(element).rating('reset');
-      }
-      
-      attr.stars = newVal;
-        $(element).rating('update', newVal);
-      });
+    $scope.$watch('stars', watchRatingStar);
     /*$(element).on('rating.change', function(event, value) {
         vm.review.stars = value;
         $('#input-star-readonly').rating('update', value);
     });*/
+    $scope.$on('updateRatingStar', updateRatingStar);
+    $scope.$on('resetRatingStar', resetRatingStar);
     
+    function watchRatingStar(newVal, oldVal) {
+      if(newVal === oldVal) {
+        return;
+      }
+
+      attr.stars = newVal;
+      $(element).rating('update', newVal);
+    }
+
+    function updateRatingStar(event, info) {
+      if(info.id === attr.id) {
+        attr.stars = info.stars;
+        $(element).rating('update', info.stars);
+      }
+    }
+
+    function resetRatingStar() {
+      attr.stars = 0;
+      $(element).rating('reset');
+    }
+
   }
 })();
