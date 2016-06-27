@@ -1,0 +1,23 @@
+<style type="text/css">
+    .alert {
+        z-index: 1;
+        position: fixed;
+        top: 50px;
+        width: calc(100% - 40px);
+        margin: 0 20px;
+    }
+
+    .alert.show {
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .alert.hide {
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s 2s, opacity 2s linear;
+    }
+</style>
+<div class="alert alert-dismissible" ng-class="{'alert-success': RateAlertCtrl.success, 'alert-danger': RateAlertCtrl.error }" role="alert" class="">
+    <strong>{{RateAlertCtrl.validation.state}}</strong> {{RateAlertCtrl.validation.message}}
+</div>
